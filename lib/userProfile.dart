@@ -47,10 +47,11 @@ class _UserProfileState extends State<UserProfile> {
         ),
       ),
       body: Column(
-        //crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            padding: EdgeInsets.only(top: 30),
+            padding: EdgeInsets.only(top: 20),
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height / 2.5,
             decoration: BoxDecoration(
@@ -61,21 +62,23 @@ class _UserProfileState extends State<UserProfile> {
               color: Colors.pink[50],
             ),
             child: Column(
+              //smainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CircleAvatar(
                   backgroundColor: Colors.white,
                   child: Icon(
                     Icons.account_circle,
-                    size: 180,
+                    size: 170,
                     color: Colors.deepOrangeAccent,
                   ),
-                  radius: 90,
+                  radius: 85,
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 15,
                 ),
                 Container(
-                  padding: EdgeInsets.only(left: 20, bottom: 5),
+                  padding: EdgeInsets.only(left: 0, bottom: 5),
                   child: Text(
                     user.displayName,
                     style: GoogleFonts.rufina(
@@ -150,7 +153,7 @@ class _UserProfileState extends State<UserProfile> {
                     style: GoogleFonts.lato(fontSize: 16),
                   ),
                   SizedBox(
-                    height: 90,
+                    height: 80,
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width,
