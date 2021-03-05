@@ -29,48 +29,57 @@ class _DoctorsListState extends State<DoctorsList> {
               );
             }
             return ListView(
+              shrinkWrap: true,
               children: snapshot.data.docs.map((document) {
                 return Container(
-                  padding: EdgeInsets.only(left: 10, right: 10, top: 5),
+                  padding: EdgeInsets.only(left: 10, right: 10, top: 0),
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height / 9,
-                  child: Card(
-                    color: Colors.white,
-                    child: FlatButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => DoctorProfile(doctor: document['name'],)),
-                        );
-                      },
-                      child: Row(
-                        children: [
-                          CircleAvatar(
-                            backgroundColor: Colors.blue,
-                            radius: 25,
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                document['name'],
-                                style: GoogleFonts.lato(
-                                    fontWeight: FontWeight.bold, fontSize: 16),
+                  height: MediaQuery.of(context).size.height / 10,
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                    color: Colors.black87,
+                    width: 0.2,
+                  ))),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DoctorProfile(
+                                  doctor: document['name'],
+                                )),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          backgroundColor: Colors.blue,
+                          radius: 25,
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              document['name'],
+                              style: GoogleFonts.lato(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: Colors.black87,
                               ),
-                              Text(
-                                document['type'],
-                                style: GoogleFonts.lato(
-                                    fontSize: 14, color: Colors.black54),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                            ),
+                            Text(
+                              document['type'],
+                              style: GoogleFonts.lato(
+                                  fontSize: 14, color: Colors.black54),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 );
