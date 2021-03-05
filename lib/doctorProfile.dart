@@ -59,7 +59,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
                         height: 20,
                       ),
                       Text(
-                        'Dr. ' + document['name'],
+                        document['name'],
                         style: GoogleFonts.lato(
                           fontWeight: FontWeight.bold,
                           fontSize: 24,
@@ -100,16 +100,47 @@ class _DoctorProfileState extends State<DoctorProfile> {
                         height: 14,
                       ),
                       Container(
-                        padding: EdgeInsets.only(left: 22, right:22),
+                        padding: EdgeInsets.only(left: 22, right: 22),
                         alignment: Alignment.center,
                         child: Text(
                           document['specification'],
                           textAlign: TextAlign.center,
                           style: GoogleFonts.lato(
-                            fontSize: 16,
+                            fontSize: 14,
                             color: Colors.black54,
-
                           ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: EdgeInsets.symmetric(horizontal: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: 15,
+                            ),
+                            Icon(Icons.place_outlined),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width / 1.4,
+                              child: Text(
+                                document['address'],
+                                style: GoogleFonts.lato(
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                          ],
                         ),
                       ),
                       Container(
@@ -130,30 +161,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
                               child: Text(
                                 document['phone'].toString(),
                                 style: GoogleFonts.lato(
-                                    fontSize: 18, color: Colors.blue),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 10),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: 15,
-                            ),
-                            Icon(Icons.place_outlined),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Text(
-                              document['address'],
-                              style: GoogleFonts.lato(
-                                fontSize: 18,
+                                    fontSize: 16, color: Colors.blue),
                               ),
                             ),
                             SizedBox(
@@ -163,7 +171,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
                         ),
                       ),
                       SizedBox(
-                        height: 22,
+                        height: 0,
                       ),
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 10),
@@ -179,7 +187,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
                             Text(
                               'Working Hours',
                               style: GoogleFonts.lato(
-                                fontSize: 18,
+                                fontSize: 16,
                               ),
                             ),
                           ],
@@ -196,7 +204,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
                             Text(
                               'Today: ',
                               style: GoogleFonts.lato(
-                                fontSize: 18,
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -231,7 +239,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
                             'Book Now',
                             style: GoogleFonts.lato(
                               color: Colors.white,
-                              fontSize: 18,
+                              fontSize: 16,
                             ),
                           ),
                         ),

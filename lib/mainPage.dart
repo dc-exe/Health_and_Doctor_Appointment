@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:health_and_doctor_appointment/cardModel.dart';
+import 'package:health_and_doctor_appointment/exploreList.dart';
 import 'package:health_and_doctor_appointment/firebaseAuth.dart';
 import 'package:health_and_doctor_appointment/nearbyModel.dart';
 import 'package:health_and_doctor_appointment/userProfile.dart';
@@ -346,8 +347,17 @@ class _MainPageState extends State<MainPage> {
                                   //   fit: BoxFit.fill,
                                   // ),
                                   ),
+                              // ignore: deprecated_member_use
                               child: FlatButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ExploreList(
+                                              type: cards[index].doctor,
+                                            )),
+                                  );
+                                },
                                 shape: new RoundedRectangleBorder(
                                     borderRadius:
                                         new BorderRadius.circular(10)),
