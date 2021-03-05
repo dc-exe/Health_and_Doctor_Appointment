@@ -62,7 +62,6 @@ class _UserProfileState extends State<UserProfile> {
               color: Colors.pink[50],
             ),
             child: Column(
-              //smainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CircleAvatar(

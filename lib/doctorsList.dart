@@ -35,7 +35,7 @@ class _DoctorsListState extends State<DoctorsList> {
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height / 9,
                   child: Card(
-                    color: Colors.lightBlue[100],
+                    color: Colors.white,
                     child: FlatButton(
                       onPressed: () {
                         Navigator.push(

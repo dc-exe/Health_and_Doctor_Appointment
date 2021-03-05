@@ -30,6 +30,7 @@ class _MainPageState extends State<MainPage> {
 
   FirebaseAuth _auth = FirebaseAuth.instance;
   var _bottomNavIndex = 0;
+  //List<Color> _colors;
 
   @override
   Widget build(BuildContext context) {
