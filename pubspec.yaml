@@ -37,6 +37,7 @@ dependencies:
   flutter_tabler_icons: ^1.0.2
   cloud_firestore: ^0.16.0
   provider: ^4.3.3
+  cool_alert: ^1.0.3
 
 dev_dependencies:
   flutter_test:

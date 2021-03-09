@@ -45,6 +45,7 @@ class _ExploreListState extends State<ExploreList> {
             }
             return ListView(
               shrinkWrap: true,
+              physics: BouncingScrollPhysics(),
               children: snapshot.data.docs.map((document) {
                 return Container(
                   padding: EdgeInsets.only(left: 10, right: 10, top: 0),

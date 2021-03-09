@@ -17,20 +17,21 @@ class _DoctorsListState extends State<DoctorsList> {
         title: Text('Find Doctors'),
       ),
       body: StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection('doctors')
-              .orderBy('name')
-              .startAt(['']).endAt(['' + '\uf8ff']).snapshots(),
-          builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (!snapshot.hasData) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            return ListView(
-              shrinkWrap: true,
-              children: snapshot.data.docs.map((document) {
+        stream: FirebaseFirestore.instance
+            .collection('doctors')
+            .orderBy('name')
+            .startAt(['']).endAt(['' + '\uf8ff']).snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return ListView(
+            physics: BouncingScrollPhysics(),
+            shrinkWrap: true,
+            children: snapshot.data.docs.map(
+              (document) {
                 return Container(
                   padding: EdgeInsets.only(left: 10, right: 10, top: 0),
                   width: MediaQuery.of(context).size.width,
@@ -83,9 +84,11 @@ class _DoctorsListState extends State<DoctorsList> {
                     ),
                   ),
                 );
-              }).toList(),
-            );
-          }),
+              },
+            ).toList(),
+          );
+        },
+      ),
     );
   }
 }

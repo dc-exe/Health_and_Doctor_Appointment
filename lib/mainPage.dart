@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:ui';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:health_and_doctor_appointment/cardModel.dart';
+import 'package:health_and_doctor_appointment/doctorProfile.dart';
 import 'package:health_and_doctor_appointment/exploreList.dart';
 import 'package:health_and_doctor_appointment/firebaseAuth.dart';
 import 'package:health_and_doctor_appointment/nearbyModel.dart';
@@ -41,16 +43,13 @@ class _MainPageState extends State<MainPage> {
     int hour = int.parse(_currentHour);
 
     setState(() {
-      if (hour >= 0 && hour < 12) {
+      if (hour >= 5 && hour < 12) {
         _message = 'Good Morning';
       } else if (hour >= 12 && hour <= 17) {
         _message = 'Good Afternoon';
-      } else if (hour > 17 && hour <= 21) {
+      } else if ((hour > 17 && hour <= 23) || (hour >= 0 && hour < 5)) {
         _message = 'Good Evening';
-      } else {
-        _message = 'Good Night';
       }
-      //print(_timeString);
     });
 
     return Container(
@@ -125,6 +124,7 @@ class _MainPageState extends State<MainPage> {
         ),
         drawer: Drawer(
           child: ListView(
+            //physics: BouncingScrollPhysics(),
             padding: EdgeInsets.zero,
             children: <Widget>[
               DrawerHeader(
@@ -140,7 +140,7 @@ class _MainPageState extends State<MainPage> {
                       alignment: Alignment.topLeft,
                       child: Text(
                         "Welcome,",
-                        style: TextStyle(
+                        style: GoogleFonts.lato(
                           fontSize: 24.0,
                           color: Colors.white,
                         ),
@@ -172,7 +172,7 @@ class _MainPageState extends State<MainPage> {
                   ],
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.teal[400],
+                  color: Colors.lightBlue,
                 ),
               ),
               ListTile(
@@ -272,6 +272,7 @@ class _MainPageState extends State<MainPage> {
           child: Stack(
             children: <Widget>[
               ListView(
+                physics: BouncingScrollPhysics(),
                 shrinkWrap: true,
                 children: <Widget>[
                   Column(
@@ -322,6 +323,7 @@ class _MainPageState extends State<MainPage> {
                         height: 150,
                         padding: EdgeInsets.only(top: 14),
                         child: ListView.builder(
+                          physics: BouncingScrollPhysics(),
                           scrollDirection: Axis.horizontal,
                           padding: EdgeInsets.symmetric(horizontal: 15.0),
                           itemCount: cards.length,
@@ -413,81 +415,92 @@ class _MainPageState extends State<MainPage> {
                               fontSize: 18),
                         ),
                       ),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: ClampingScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        padding: EdgeInsets.only(
-                            bottom: 80, top: 15, right: 10, left: 10),
-                        itemCount: nearbyCards.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            height: 90,
-                            child: Card(
-                              elevation: 5,
-                              shape: new RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(10),
-                              ),
-                              child: FlatButton(
-                                onPressed: () {},
-                                child: Column(
-                                  children: <Widget>[
-                                    // ListTile(
-                                    //   leading: CircleAvatar(
-                                    //     backgroundColor: Colors.lightBlue,
-                                    //   ),
-                                    //   title: Text("Doctor"),
-                                    // ),
-                                    Container(
-                                      padding: EdgeInsets.only(top: 20),
+                      StreamBuilder(
+                        stream: FirebaseFirestore.instance
+                            .collection('doctors')
+                            .orderBy('city')
+                            .startAt(['Rajkot']).endAt(
+                                ['Rajkot' + '\uf8ff']).snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          return ListView(
+                            padding:
+                                EdgeInsets.only(top: 10, left: 10, right: 10),
+                            physics: BouncingScrollPhysics(),
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            children: snapshot.data.docs.map(
+                              (document) {
+                                return Card(
+                                  elevation: 4,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Container(
+                                    padding: EdgeInsets.only(
+                                        left: 10, right: 10, top: 0),
+                                    width: MediaQuery.of(context).size.width,
+                                    height:
+                                        MediaQuery.of(context).size.height / 10,
+                                    child: TextButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  DoctorProfile(
+                                                    doctor: document['name'],
+                                                  )),
+                                        );
+                                      },
                                       child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
                                         children: [
                                           CircleAvatar(
-                                            //backgroundColor: Colors.blue,
-                                            backgroundImage: AssetImage(
-                                                nearbyCards[index].cardImage),
-                                            radius: 23,
+                                            backgroundColor: Colors.blue,
+                                            radius: 25,
                                           ),
                                           SizedBox(
-                                            width: 15,
+                                            width: 20,
                                           ),
                                           Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             children: [
                                               Text(
-                                                nearbyCards[index].name,
+                                                document['name'],
                                                 style: GoogleFonts.lato(
-                                                    fontSize: 17),
-                                              ),
-                                              Text(
-                                                nearbyCards[index].doctor,
-                                                style: GoogleFonts.lato(
-                                                  fontSize: 12,
-                                                  color: Colors.grey,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                  color: Colors.black87,
                                                 ),
                                               ),
+                                              Text(
+                                                document['type'],
+                                                style: GoogleFonts.lato(
+                                                    fontSize: 14,
+                                                    color: Colors.black54),
+                                              ),
                                             ],
-                                          ),
-                                          SizedBox(
-                                            width: 60,
-                                          ),
-                                          Icon(
-                                            FlutterIcons.chevron_right_mdi,
                                           ),
                                         ],
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                                  ),
+                                );
+                              },
+                            ).toList(),
                           );
                         },
+                      ),
+                      SizedBox(
+                        height: 80,
                       ),
                     ],
                   ),

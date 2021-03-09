@@ -34,7 +34,7 @@ class _UserProfileState extends State<UserProfile> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Colors.pink[50],
+        backgroundColor: Colors.blue[100],
         elevation: 0,
         title: Text(
           "Profile",
@@ -59,7 +59,7 @@ class _UserProfileState extends State<UserProfile> {
                 bottomLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20),
               ),
-              color: Colors.pink[50],
+              color: Colors.blue[100],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -68,21 +68,21 @@ class _UserProfileState extends State<UserProfile> {
                   backgroundColor: Colors.white,
                   child: Icon(
                     Icons.account_circle,
-                    size: 170,
-                    color: Colors.deepOrangeAccent,
+                    size: 160,
+                    color: Colors.lightBlue,
                   ),
-                  radius: 85,
+                  radius: 80,
                 ),
                 SizedBox(
-                  height: 15,
+                  height: 20,
                 ),
                 Container(
                   padding: EdgeInsets.only(left: 0, bottom: 5),
                   child: Text(
                     user.displayName,
-                    style: GoogleFonts.rufina(
+                    style: GoogleFonts.lato(
                       fontSize: 28,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),

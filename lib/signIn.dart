@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -113,7 +112,8 @@ class _SignInState extends State<SignIn> {
                     }
                   },
                   shape: RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(35.0)),
+                    borderRadius: new BorderRadius.circular(35.0),
+                  ),
                 ),
               ),
             ),

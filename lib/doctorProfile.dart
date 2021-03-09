@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:health_and_doctor_appointment/bookingScreen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DoctorProfile extends StatefulWidget {
@@ -45,6 +46,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
               );
             }
             return ListView(
+              physics: BouncingScrollPhysics(),
               shrinkWrap: true,
               children: snapshot.data.docs.map((document) {
                 return Container(
@@ -234,7 +236,16 @@ class _DoctorProfileState extends State<DoctorProfile> {
                             borderRadius: BorderRadius.circular(15),
                           ),
                           color: Colors.indigo,
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => BookingScreen(
+                                  doctor: document['name'],
+                                ),
+                              ),
+                            );
+                          },
                           child: Text(
                             'Book Now',
                             style: GoogleFonts.lato(
