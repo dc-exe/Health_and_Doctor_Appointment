@@ -461,7 +461,7 @@ class _BookingScreenState extends State<BookingScreen> {
                           print(_dateController.text);
                           print(widget.doctor);
                           showAlertDialog(context);
-                          //_createAppointment();
+                          _createAppointment();
                         }
                       },
                       child: Text(
@@ -486,15 +486,27 @@ class _BookingScreenState extends State<BookingScreen> {
   }
 
   Future<void> _createAppointment() async {
-    CollectionReference reference =
-        FirebaseFirestore.instance.collection('appointments');
-    reference.add({
+    // CollectionReference reference =
+    //     FirebaseFirestore.instance.collection('appointments').doc().add({
+    // 'name': _nameController.text,
+    // 'phone': _phoneController.text,
+    // 'description': _descriptionController.text,
+    // 'doctor': _doctorController.text,
+    // 'date': _dateController.text,
+    // 'time': _timeController.text
+    // });
+    FirebaseFirestore.instance
+        .collection('appointments')
+        .doc(user.email)
+        .collection('appointments')
+        .doc()
+        .set({
       'name': _nameController.text,
       'phone': _phoneController.text,
       'description': _descriptionController.text,
       'doctor': _doctorController.text,
       'date': _dateController.text,
       'time': _timeController.text
-    });
+    }, SetOptions(merge: true));
   }
 }
