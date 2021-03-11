@@ -26,6 +26,9 @@ class _BookingScreenState extends State<BookingScreen> {
   DateTime selectedDate = DateTime.now();
   TimeOfDay currentTime = TimeOfDay.now();
   String timeText = 'Select Time';
+  String dateUTC;
+  String _year, _month, _date;
+  String date_Time;
 
   FirebaseAuth _auth = FirebaseAuth.instance;
   User user;
@@ -34,7 +37,7 @@ class _BookingScreenState extends State<BookingScreen> {
     user = _auth.currentUser;
   }
 
-  Future<Null> selectTime(BuildContext context) async {
+  Future<void> selectTime(BuildContext context) async {
     TimeOfDay selectedTime = await showTimePicker(
       context: context,
       initialTime: currentTime,
@@ -50,6 +53,7 @@ class _BookingScreenState extends State<BookingScreen> {
         _timeController.text = timeText;
       });
     }
+    date_Time = selectedTime.toString().substring(10, 15);
   }
 
   showAlertDialog(BuildContext context) {
@@ -361,6 +365,14 @@ class _BookingScreenState extends State<BookingScreen> {
                                           DateFormat('dd-MM-yyyy')
                                               .format(selectedDate);
                                       _dateController.text = formattedDate;
+                                      dateUTC = DateFormat('yyyy-MM-dd')
+                                          .format(selectedDate);
+                                      _year = DateFormat('yyyy')
+                                          .format(selectedDate);
+                                      _month = DateFormat('MM')
+                                          .format(selectedDate);
+                                      _date = DateFormat('dd')
+                                          .format(selectedDate);
                                     });
                                   },
                                 );
@@ -495,6 +507,7 @@ class _BookingScreenState extends State<BookingScreen> {
     // 'date': _dateController.text,
     // 'time': _timeController.text
     // });
+    print(dateUTC+' '+date_Time+':00');
     FirebaseFirestore.instance
         .collection('appointments')
         .doc(user.email)
@@ -505,8 +518,7 @@ class _BookingScreenState extends State<BookingScreen> {
       'phone': _phoneController.text,
       'description': _descriptionController.text,
       'doctor': _doctorController.text,
-      'date': _dateController.text,
-      'time': _timeController.text
+      'date': DateTime.parse(dateUTC+' '+date_Time+':00'),
     }, SetOptions(merge: true));
   }
 }
