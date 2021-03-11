@@ -5,6 +5,7 @@ import 'package:health_and_doctor_appointment/cardModel.dart';
 import 'package:health_and_doctor_appointment/doctorProfile.dart';
 import 'package:health_and_doctor_appointment/exploreList.dart';
 import 'package:health_and_doctor_appointment/firebaseAuth.dart';
+import 'package:health_and_doctor_appointment/myAppointments.dart';
 import 'package:health_and_doctor_appointment/nearbyModel.dart';
 import 'package:health_and_doctor_appointment/userProfile.dart';
 import 'package:health_and_doctor_appointment/doctorsList.dart';
@@ -554,7 +555,14 @@ class _MainPageState extends State<MainPage> {
                         tooltip: 'My Appointments',
                         iconSize: 28,
                         icon: Icon(FlutterIcons.calendar_clock_mco),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MyAppointments(),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
