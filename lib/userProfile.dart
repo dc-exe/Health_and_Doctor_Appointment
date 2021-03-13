@@ -31,166 +31,264 @@ class _UserProfileState extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[100],
-      key: _scaffoldKey,
-      appBar: AppBar(
-        backgroundColor: Colors.blue[100],
-        elevation: 0,
-        title: Text(
-          "Profile",
-          style: TextStyle(
-            color: Colors.black,
-          ),
-        ),
-        iconTheme: IconThemeData(
-          color: Colors.black,
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              padding: EdgeInsets.only(top: 20),
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height / 2.5,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20),
-                ),
-                color: Colors.blue[100],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    backgroundColor: Colors.white,
-                    child: Icon(
-                      Icons.account_circle,
-                      size: 160,
-                      color: Colors.lightBlue,
-                    ),
-                    radius: 80,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(left: 0, bottom: 5),
-                    child: Text(
-                      user.displayName,
-                      style: GoogleFonts.lato(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  user.emailVerified == true
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.verified, size: 20),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              'Verified',
-                              style: GoogleFonts.lato(fontSize: 10),
-                            ),
-                          ],
-                        )
-                      : Text(
-                          '(Not verified)',
-                          style: GoogleFonts.lato(fontSize: 10),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            stops: [0.1, 0.5],
+                            colors: [
+                              Colors.indigo,
+                              Colors.indigoAccent,
+                            ],
+                          ),
                         ),
-                ],
-              ),
-            ),
-            Container(
-              color: Colors.white,
-              //margin: EdgeInsets.symmetric(vertical: 10, horizontal: 40),
-              padding: EdgeInsets.only(top: 10, right: 20 ,left: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    'Email',
-                    style: GoogleFonts.lato(
-                      color: Colors.teal,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    user.email,
-                    style: GoogleFonts.lato(
-                        fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Text(
-                    'Uesr ID',
-                    style: GoogleFonts.lato(
-                      color: Colors.teal,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    user.uid,
-                    style: GoogleFonts.lato(fontSize: 16),
-                  ),
-                  SizedBox(
-                    height: 80,
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    alignment: Alignment.center,
-                    child: RaisedButton(
-                      onPressed: () {
-                        Navigator.popUntil(context, ModalRoute.withName('/'));
-                      },
-                      color: Colors.teal[500],
-                      elevation: 7,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: 50,
-                        width: MediaQuery.of(context).size.width,
-                        child: Text(
-                          'Sign Out',
-                          style: GoogleFonts.lato(
+                        height: MediaQuery.of(context).size.height / 5,
+                        child: Container(
+                          padding: EdgeInsets.only(top: 10, right: 7),
+                          alignment: Alignment.topRight,
+                          child: IconButton(
+                            
+                            icon: Icon(
+                              FlutterIcons.gear_faw,
                               color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold),
+                              size: 20,
+                            ),
+                            onPressed: () {
+                              print('Pressed');
+                            },
+                          ),
                         ),
                       ),
+                      Container(
+                        alignment: Alignment.center,
+                        height: MediaQuery.of(context).size.height / 5,
+                        padding: EdgeInsets.only(top: 75),
+                        child: Text(
+                          user.displayName,
+                          style: GoogleFonts.lato(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    child: CircleAvatar(
+                      radius: 80,
+                      backgroundColor: Colors.white,
+                      backgroundImage: AssetImage('assets/person.jpg'),
                     ),
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.teal[50],
+                          width: 5,
+                        ),
+                        shape: BoxShape.circle),
                   ),
                 ],
               ),
-            ),
-          ],
+              Container(
+                margin: EdgeInsets.only(left: 15, right: 15),
+                padding: EdgeInsets.only(left: 20),
+                height: MediaQuery.of(context).size.height / 7,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.blueGrey[50],
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(30),
+                          child: Container(
+                            height: 27,
+                            width: 27,
+                            color: Colors.red[900],
+                            child: Icon(
+                              Icons.mail_rounded,
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          user.email,
+                          style: GoogleFonts.lato(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black54,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(30),
+                          child: Container(
+                            height: 27,
+                            width: 27,
+                            color: Colors.blue[800],
+                            child: Icon(
+                              Icons.phone,
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          user.phoneNumber == null
+                              ? "Not Provided"
+                              : user.phoneNumber,
+                          style: GoogleFonts.lato(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black54,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(left: 15, right: 15, top: 20),
+                padding: EdgeInsets.only(left: 20, top: 20),
+                height: MediaQuery.of(context).size.height / 7,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.blueGrey[50],
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(30),
+                          child: Container(
+                            height: 27,
+                            width: 27,
+                            color: Colors.indigo[600],
+                            child: Icon(
+                              FlutterIcons.pencil_ent,
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          "Bio",
+                          style: GoogleFonts.lato(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.only(top: 10, left: 40),
+                      child: Text(
+                        "Tell about yourself..",
+                        style: GoogleFonts.lato(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black38,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(left: 15, right: 15, top: 20),
+                padding: EdgeInsets.only(left: 20, top: 20),
+                height: MediaQuery.of(context).size.height / 7,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.blueGrey[50],
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(30),
+                          child: Container(
+                            height: 27,
+                            width: 27,
+                            color: Colors.green[900],
+                            child: Icon(
+                              FlutterIcons.history_faw,
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          "Appointment History",
+                          style: GoogleFonts.lato(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.only(top: 10, left: 40),
+                      child: Text(
+                        "History appears here..",
+                        style: GoogleFonts.lato(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black38,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 30,),
+            ],
+          ),
         ),
       ),
     );
-  }
-
-  Future _signOut() async {
-    await _auth.signOut();
   }
 }
