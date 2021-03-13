@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:health_and_doctor_appointment/register.dart';
 
 import 'mainPage.dart';
@@ -17,19 +17,23 @@ class _SignInState extends State<SignIn> {
   final TextEditingController _emailController = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       key: _scaffoldKey,
       body: Builder(builder: (BuildContext context) {
-        return SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.fromLTRB(10, 135, 10, 10),
-                child: withEmailPassword(),
-              ),
-            ],
+        return SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.fromLTRB(10, 30, 10, 10),
+                  child: withEmailPassword(),
+                ),
+              ],
+            ),
           ),
         );
       }),
@@ -40,70 +44,108 @@ class _SignInState extends State<SignIn> {
     return Form(
       key: _formKey,
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(right: 16, left: 16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Container(
-              child: const Text(
-                'Hello\nThere.',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 50.0,
+            SizedBox(
+              width: double.infinity,
+              child: Container(
+                child: Image.asset(
+                  'assets/vector-doc2.jpg',
+                  scale: 3.5,
                 ),
               ),
-              alignment: Alignment.centerLeft,
             ),
             SizedBox(
-              height: 30.0,
+              height: 10,
+            ),
+            Container(
+              padding: EdgeInsets.only(bottom: 25),
+              child: Text(
+                'Login',
+                style: GoogleFonts.lato(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
             TextFormField(
+              style: GoogleFonts.lato(
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+              ),
               keyboardType: TextInputType.emailAddress,
               controller: _emailController,
               decoration: InputDecoration(
-                labelText: 'Email',
-                labelStyle:
-                    TextStyle(fontWeight: FontWeight.w500, color: Colors.grey),
-                focusedBorder: new UnderlineInputBorder(
-                  borderSide: new BorderSide(color: Colors.black, width: 1.5),
+                contentPadding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(90.0)),
+                  borderSide: BorderSide.none,
+                ),
+                filled: true,
+                fillColor: Colors.grey[350],
+                hintText: 'Email',
+                hintStyle: GoogleFonts.lato(
+                  color: Colors.black26,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
                 ),
               ),
               validator: (value) {
-                if (value.isEmpty) return 'Please enter some text';
-                return null;
+                if (value.isEmpty) {
+                  return 'Please enter the Email';
+                } else if (!emailValidate(value)) {
+                  return 'Please enter correct Email';
+                } else {
+                  return null;
+                }
               },
             ),
             SizedBox(
               height: 25.0,
             ),
             TextFormField(
+              style: GoogleFonts.lato(
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+              ),
+              //keyboardType: TextInputType.visiblePassword,
               controller: _passwordController,
               decoration: InputDecoration(
-                labelText: 'Password',
-                labelStyle:
-                    TextStyle(fontWeight: FontWeight.w500, color: Colors.grey),
-                focusedBorder: new UnderlineInputBorder(
-                  borderSide: new BorderSide(color: Colors.black, width: 1.5),
+                contentPadding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(90.0)),
+                  borderSide: BorderSide.none,
+                ),
+                filled: true,
+                fillColor: Colors.grey[350],
+                hintText: 'Password',
+                hintStyle: GoogleFonts.lato(
+                  color: Colors.black26,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
                 ),
               ),
               validator: (value) {
-                if (value.isEmpty) return 'Please enter some text';
+                if (value.isEmpty) return 'Please enter the Passord';
                 return null;
               },
               obscureText: true,
             ),
             Container(
-              padding: const EdgeInsets.only(top: 50.0),
-              alignment: Alignment.center,
-              child: ButtonTheme(
-                minWidth: double.infinity,
-                height: 55.0,
-                child: RaisedButton(
-                  elevation: 10.0,
-                  color: Colors.black,
-                  textColor: Colors.white,
+              padding: const EdgeInsets.only(top: 25.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
                   child: Text(
-                    "LOGIN",
-                    style: TextStyle(fontSize: 16),
+                    "Sign In",
+                    style: GoogleFonts.lato(
+                      color: Colors.white,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   onPressed: () async {
                     if (_formKey.currentState.validate()) {
@@ -111,10 +153,67 @@ class _SignInState extends State<SignIn> {
                       _signInWithEmailAndPassword();
                     }
                   },
-                  shape: RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(35.0),
+                  style: ElevatedButton.styleFrom(
+                    elevation: 2,
+                    primary: Colors.indigo[900],
+                    onPrimary: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(32.0),
+                    ),
                   ),
                 ),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(top: 15),
+              child: TextButton(
+                style: ButtonStyle(
+                    overlayColor:
+                        MaterialStateProperty.all(Colors.transparent)),
+                onPressed: () {},
+                child: Text(
+                  'Forgot Password?',
+                  style: GoogleFonts.lato(
+                    fontSize: 16,
+                    color: Colors.black54,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(top: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Colors.red[700],
+                        borderRadius: BorderRadius.circular(32)),
+                    child: IconButton(
+                      icon: Icon(
+                        FlutterIcons.google_ant,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {},
+                    ),
+                  ),
+                  SizedBox(
+                    width: 30,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Colors.blue[900],
+                        borderRadius: BorderRadius.circular(32)),
+                    child: IconButton(
+                      icon: Icon(
+                        FlutterIcons.facebook_f_faw,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {},
+                    ),
+                  )
+                ],
               ),
             ),
             Container(
@@ -126,16 +225,23 @@ class _SignInState extends State<SignIn> {
                   children: [
                     Text(
                       "Don't have an account?",
-                      style: TextStyle(
+                      style: GoogleFonts.lato(
                         fontSize: 15.0,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
-                    FlatButton(
+                    TextButton(
+                      style: ButtonStyle(
+                          overlayColor:
+                              MaterialStateProperty.all(Colors.transparent)),
                       onPressed: () => _pushPage(context, Register()),
                       child: Text(
-                        "Signup here",
-                        style: TextStyle(color: Colors.green),
+                        'Signup here',
+                        style: GoogleFonts.lato(
+                          fontSize: 15,
+                          color: Colors.indigo[700],
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ],
@@ -174,6 +280,16 @@ class _SignInState extends State<SignIn> {
     );
   }
 
+  bool emailValidate(String email) {
+    if (RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(email)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   void _signInWithEmailAndPassword() async {
     try {
       final User user = (await _auth.signInWithEmailAndPassword(
@@ -185,28 +301,24 @@ class _SignInState extends State<SignIn> {
         await user.sendEmailVerification();
       }
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
-        return MainPage(
-          user: user,
-        );
+        return MainPage();
       }));
       //Navigator.pop(context);
     } catch (e) {
-      print(">>> " + e.toString());
       final snackBar = SnackBar(
         content: Row(
           children: [
-            Icon(Icons.info_outlined),
+            Icon(
+              Icons.info_outline,
+              color: Colors.white,
+            ),
             Text(" There was a problem signing you in"),
           ],
         ),
       );
       Navigator.pop(context);
-      _scaffoldKey.currentState.showSnackBar(snackBar);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
-  }
-
-  void _signOut() async {
-    await _auth.signOut();
   }
 
   void _pushPage(BuildContext context, Widget page) {
