@@ -177,6 +177,18 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   Container(
+                    padding: EdgeInsets.only(left: 23, bottom: 10),
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "We care for you",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.lato(
+                          color: Colors.blue[800],
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                    ),
+                  ),
+                  Container(
                     height: 150,
                     child: ListView.builder(
                       physics: ClampingScrollPhysics(),
@@ -194,7 +206,7 @@ class _HomePageState extends State<HomePage> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             gradient: LinearGradient(
-                              stops: [0, 1],
+                              stops: [0.4, 0.7],
                               begin: Alignment.centerLeft,
                               end: Alignment.centerRight,
                               colors: bannerCards[index].cardBackground,
@@ -298,7 +310,7 @@ class _HomePageState extends State<HomePage> {
                               );
                             },
                             shape: new RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(10)),
+                                borderRadius: new BorderRadius.circular(20)),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -454,7 +466,7 @@ class _HomePageState extends State<HomePage> {
                     },
                   ),
                   SizedBox(
-                    height: 80,
+                    height: 40,
                   ),
                 ],
               ),

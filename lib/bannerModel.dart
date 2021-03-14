@@ -19,8 +19,8 @@ List<BannerModel> bannerCards = [
   new BannerModel(
       "Covid-19",
       [
-        Color(0xffffffff),
-        Color(0xffffddde),
+        Color(0xffcfe3fc),
+        Color(0xffb6d4fa),
       ],
-      "assets/virus.jpg"),
+      "assets/covid.jpg"),
 ];
