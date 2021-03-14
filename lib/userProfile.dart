@@ -32,8 +32,14 @@ class _UserProfileState extends State<UserProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
+        child: NotificationListener<OverscrollIndicatorNotification>(
+          onNotification: (OverscrollIndicatorNotification overscroll) {
+            overscroll.disallowGlow();
+            return;
+          },
+          child: ListView(
+            physics: ClampingScrollPhysics(),
+            shrinkWrap: true,
             children: <Widget>[
               Stack(
                 alignment: Alignment.center,
@@ -57,7 +63,6 @@ class _UserProfileState extends State<UserProfile> {
                           padding: EdgeInsets.only(top: 10, right: 7),
                           alignment: Alignment.topRight,
                           child: IconButton(
-                            
                             icon: Icon(
                               FlutterIcons.gear_faw,
                               color: Colors.white,
@@ -284,7 +289,9 @@ class _UserProfileState extends State<UserProfile> {
                   ],
                 ),
               ),
-              SizedBox(height: 30,),
+              SizedBox(
+                height: 30,
+              ),
             ],
           ),
         ),

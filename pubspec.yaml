@@ -39,6 +39,7 @@ dependencies:
   provider: ^4.3.3
   cool_alert: ^1.0.3
   google_nav_bar: ^5.0.2
+  font_awesome_flutter: ^8.12.0
 
 dev_dependencies:
   flutter_test:

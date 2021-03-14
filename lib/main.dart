@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:health_and_doctor_appointment/firebaseAuth.dart';
 import 'package:health_and_doctor_appointment/mainPage.dart';
 import 'package:health_and_doctor_appointment/userProfile.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -18,10 +17,11 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
+// ignore: must_be_immutable
 class MyApp extends StatelessWidget {
   FirebaseAuth _auth = FirebaseAuth.instance;
   User user;
-
+  
   Future<void> _getUser() async {
     user = _auth.currentUser;
   }
