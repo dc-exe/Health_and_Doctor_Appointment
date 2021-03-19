@@ -1,46 +1,56 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:health_and_doctor_appointment/register.dart';
+import 'package:health_and_doctor_appointment/mainPage.dart';
+import 'package:health_and_doctor_appointment/screens/signIn.dart';
 
-import 'mainPage.dart';
-
-class SignIn extends StatefulWidget {
+class Register extends StatefulWidget {
   @override
-  _SignInState createState() => _SignInState();
+  _RegisterState createState() => _RegisterState();
 }
 
-class _SignInState extends State<SignIn> {
+class _RegisterState extends State<Register> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _displayName = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _passwordConfirmController =
+      TextEditingController();
+
+  bool _isSuccess;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      key: _scaffoldKey,
-      body: Builder(builder: (BuildContext context) {
-        return SafeArea(
+      body: SafeArea(
+        child: Center(
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.fromLTRB(10, 30, 10, 10),
-                  child: withEmailPassword(),
+                  padding: EdgeInsets.fromLTRB(10, 40, 10, 10),
+                  child: _signUp(),
                 ),
               ],
             ),
           ),
-        );
-      }),
+        ),
+      ),
     );
   }
 
-  Widget withEmailPassword() {
+  Widget _signUp() {
     return Form(
       key: _formKey,
       child: Padding(
@@ -49,26 +59,47 @@ class _SignInState extends State<SignIn> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             SizedBox(
-              width: double.infinity,
-              child: Container(
-                child: Image.asset(
-                  'assets/vector-doc2.jpg',
-                  scale: 3.5,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 10,
+              height: 20,
             ),
             Container(
-              padding: EdgeInsets.only(bottom: 25),
+              padding: EdgeInsets.only(bottom: 50),
               child: Text(
-                'Login',
+                'Sign up',
                 style: GoogleFonts.lato(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
               ),
+            ),
+            TextFormField(
+              style: GoogleFonts.lato(
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+              ),
+              keyboardType: TextInputType.emailAddress,
+              controller: _displayName,
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(90.0)),
+                  borderSide: BorderSide.none,
+                ),
+                filled: true,
+                fillColor: Colors.grey[350],
+                hintText: 'Name',
+                hintStyle: GoogleFonts.lato(
+                  color: Colors.black26,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              validator: (value) {
+                if (value.isEmpty) return 'Please enter the Name';
+                return null;
+              },
+            ),
+            SizedBox(
+              height: 25.0,
             ),
             TextFormField(
               style: GoogleFonts.lato(
@@ -97,9 +128,8 @@ class _SignInState extends State<SignIn> {
                   return 'Please enter the Email';
                 } else if (!emailValidate(value)) {
                   return 'Please enter correct Email';
-                } else {
-                  return null;
                 }
+                return null;
               },
             ),
             SizedBox(
@@ -128,8 +158,48 @@ class _SignInState extends State<SignIn> {
                 ),
               ),
               validator: (value) {
-                if (value.isEmpty) return 'Please enter the Passord';
-                return null;
+                if (value.isEmpty) {
+                  return 'Please enter the Password';
+                } else if (value.length < 8) {
+                  return 'Password must be at least 8 characters long';
+                } else {
+                  return null;
+                }
+              },
+              obscureText: true,
+            ),
+            SizedBox(
+              height: 25.0,
+            ),
+            TextFormField(
+              style: GoogleFonts.lato(
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+              ),
+              controller: _passwordConfirmController,
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(90.0)),
+                  borderSide: BorderSide.none,
+                ),
+                filled: true,
+                fillColor: Colors.grey[350],
+                hintText: 'Confirm Password',
+                hintStyle: GoogleFonts.lato(
+                  color: Colors.black26,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Please enter the Password';
+                } else if (value.compareTo(_passwordController.text) != 0) {
+                  return 'Password not Matching';
+                } else {
+                  return null;
+                }
               },
               obscureText: true,
             ),
@@ -150,7 +220,7 @@ class _SignInState extends State<SignIn> {
                   onPressed: () async {
                     if (_formKey.currentState.validate()) {
                       showLoaderDialog(context);
-                      _signInWithEmailAndPassword();
+                      _registerAccount();
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -165,24 +235,14 @@ class _SignInState extends State<SignIn> {
               ),
             ),
             Container(
-              padding: EdgeInsets.only(top: 15),
-              child: TextButton(
-                style: ButtonStyle(
-                    overlayColor:
-                        MaterialStateProperty.all(Colors.transparent)),
-                onPressed: () {},
-                child: Text(
-                  'Forgot Password?',
-                  style: GoogleFonts.lato(
-                    fontSize: 16,
-                    color: Colors.black54,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+              padding: EdgeInsets.only(top: 25, left: 10, right: 10),
+              width: MediaQuery.of(context).size.width,
+              child: Divider(
+                thickness: 1.5,
               ),
             ),
             Container(
-              padding: EdgeInsets.only(top: 15),
+              padding: EdgeInsets.only(top: 25),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -218,13 +278,13 @@ class _SignInState extends State<SignIn> {
             ),
             Container(
               child: Padding(
-                padding: const EdgeInsets.only(top: 18.0),
+                padding: const EdgeInsets.only(top: 5.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      "Don't have an account?",
+                      "Already have an account?",
                       style: GoogleFonts.lato(
                         fontSize: 15.0,
                         fontWeight: FontWeight.w700,
@@ -234,9 +294,9 @@ class _SignInState extends State<SignIn> {
                       style: ButtonStyle(
                           overlayColor:
                               MaterialStateProperty.all(Colors.transparent)),
-                      onPressed: () => _pushPage(context, Register()),
+                      onPressed: () => _pushPage(context, SignIn()),
                       child: Text(
-                        'Signup here',
+                        'Sign in',
                         style: GoogleFonts.lato(
                           fontSize: 15,
                           color: Colors.indigo[700],
@@ -252,13 +312,6 @@ class _SignInState extends State<SignIn> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
   }
 
   showLoaderDialog(BuildContext context) {
@@ -290,34 +343,32 @@ class _SignInState extends State<SignIn> {
     }
   }
 
-  void _signInWithEmailAndPassword() async {
-    try {
-      final User user = (await _auth.signInWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
-      ))
-          .user;
+  void _registerAccount() async {
+    final User user = (await _auth.createUserWithEmailAndPassword(
+      email: _emailController.text,
+      password: _passwordController.text,
+    ))
+        .user;
+
+    if (user != null) {
       if (!user.emailVerified) {
         await user.sendEmailVerification();
       }
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
-        return MainPage();
-      }));
-      //Navigator.pop(context);
-    } catch (e) {
-      final snackBar = SnackBar(
-        content: Row(
-          children: [
-            Icon(
-              Icons.info_outline,
-              color: Colors.white,
-            ),
-            Text(" There was a problem signing you in"),
-          ],
-        ),
-      );
-      Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      await user.updateProfile(displayName: _displayName.text);
+
+      FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+        'name': _displayName.text,
+        'birthDate': null,
+        'email': user.email,
+        'phone': null,
+        'bio': null,
+        'city': null,
+      }, SetOptions(merge: true));
+
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
+    } else {
+      _isSuccess = false;
     }
   }
 

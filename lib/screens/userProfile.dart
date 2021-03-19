@@ -1,10 +1,12 @@
 import 'dart:ui';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:health_and_doctor_appointment/firestore-data/appointmentHistoryList.dart';
+import 'package:health_and_doctor_appointment/screens/userSettings.dart';
 
 class UserProfile extends StatefulWidget {
   const UserProfile({Key key}) : super(key: key);
@@ -69,7 +71,12 @@ class _UserProfileState extends State<UserProfile> {
                               size: 20,
                             ),
                             onPressed: () {
-                              print('Pressed');
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => UserSettings(),
+                                ),
+                              );
                             },
                           ),
                         ),
@@ -167,8 +174,8 @@ class _UserProfileState extends State<UserProfile> {
                           width: 10,
                         ),
                         Text(
-                          user.phoneNumber == null
-                              ? "Not Provided"
+                          user?.phoneNumber?.isEmpty ?? true
+                              ? "Not Added"
                               : user.phoneNumber,
                           style: GoogleFonts.lato(
                             fontSize: 16,
@@ -211,7 +218,7 @@ class _UserProfileState extends State<UserProfile> {
                           width: 10,
                         ),
                         Text(
-                          "Bio",
+                          'Bio',
                           style: GoogleFonts.lato(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -221,24 +228,15 @@ class _UserProfileState extends State<UserProfile> {
                       ],
                     ),
                     Container(
-                      alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.only(top: 10, left: 40),
-                      child: Text(
-                        "Tell about yourself..",
-                        style: GoogleFonts.lato(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black38,
-                        ),
-                      ),
-                    ),
+                      child: getBio(),
+                    )
                   ],
                 ),
               ),
               Container(
                 margin: EdgeInsets.only(left: 15, right: 15, top: 20),
                 padding: EdgeInsets.only(left: 20, top: 20),
-                height: MediaQuery.of(context).size.height / 7,
+                height: MediaQuery.of(context).size.height / 5,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -272,17 +270,31 @@ class _UserProfileState extends State<UserProfile> {
                             color: Colors.black,
                           ),
                         ),
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.only(right: 10),
+                            alignment: Alignment.centerRight,
+                            child: SizedBox(
+                              height: 30,
+                              child: TextButton(
+                                onPressed: () {},
+                                child: Text('View all'),
+                              ),
+                            ),
+                          ),
+                        )
                       ],
                     ),
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.only(top: 10, left: 40),
-                      child: Text(
-                        "History appears here..",
-                        style: GoogleFonts.lato(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black38,
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Expanded(
+                      child: Scrollbar(
+                        child: Container(
+                          padding: EdgeInsets.only(left: 35, right: 15),
+                          child: SingleChildScrollView(
+                            child: AppointmentHistoryList(),
+                          ),
                         ),
                       ),
                     ),
@@ -296,6 +308,34 @@ class _UserProfileState extends State<UserProfile> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget getBio() {
+    return StreamBuilder(
+      stream: FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData)
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        var userData = snapshot.data;
+        return Container(
+          alignment: Alignment.centerLeft,
+          padding: EdgeInsets.only(top: 10, left: 40),
+          child: Text(
+            userData['bio'],
+            style: GoogleFonts.lato(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: Colors.black38,
+            ),
+          ),
+        );
+      },
     );
   }
 }

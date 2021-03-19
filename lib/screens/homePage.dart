@@ -1,21 +1,17 @@
 import 'dart:async';
 import 'dart:ui';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/painting.dart';
-import 'package:health_and_doctor_appointment/bannerModel.dart';
-import 'package:health_and_doctor_appointment/cardModel.dart';
-import 'package:health_and_doctor_appointment/doctorProfile.dart';
-import 'package:health_and_doctor_appointment/exploreList.dart';
-import 'package:health_and_doctor_appointment/firebaseAuth.dart';
-import 'package:health_and_doctor_appointment/mainPage.dart';
-import 'package:health_and_doctor_appointment/userProfile.dart';
+import 'package:health_and_doctor_appointment/firestore-data/notificationList.dart';
+import 'package:health_and_doctor_appointment/model/cardModel.dart';
+import 'package:health_and_doctor_appointment/carouselSlider.dart';
+import 'package:health_and_doctor_appointment/screens/exploreList.dart';
+import 'package:health_and_doctor_appointment/firestore-data/searchList.dart';
+import 'package:health_and_doctor_appointment/firestore-data/topRatedList.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -40,6 +36,13 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _getUser();
+    _doctorName = new TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _doctorName.dispose();
+    super.dispose();
   }
 
   @override
@@ -91,7 +94,12 @@ class _HomePageState extends State<HomePage> {
               IconButton(
                 splashRadius: 20,
                 icon: Icon(Icons.notifications_active),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (contex) => NotificationList()));
+                },
               ),
             ],
           ),
@@ -140,6 +148,7 @@ class _HomePageState extends State<HomePage> {
                   Container(
                     padding: EdgeInsets.fromLTRB(20, 0, 20, 25),
                     child: TextFormField(
+                      textInputAction: TextInputAction.search,
                       controller: _doctorName,
                       decoration: InputDecoration(
                         contentPadding:
@@ -174,6 +183,22 @@ class _HomePageState extends State<HomePage> {
                         fontSize: 18,
                         fontWeight: FontWeight.w800,
                       ),
+                      onFieldSubmitted: (String value) {
+                        setState(
+                          () {
+                            value.length == 0
+                                ? Container()
+                                : Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => SearchList(
+                                        searchKey: value,
+                                      ),
+                                    ),
+                                  );
+                          },
+                        );
+                      },
                     ),
                   ),
                   Container(
@@ -189,78 +214,14 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   Container(
-                    height: 150,
-                    child: ListView.builder(
-                      physics: ClampingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      padding: EdgeInsets.only(left: 20.0),
-                      itemCount: bannerCards.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Container(
-                          alignment: Alignment.centerLeft,
-                          width: MediaQuery.of(context).size.width-40,
-                          height: 140,
-                          margin:
-                              EdgeInsets.only(left: 0, right: 20, bottom: 20),
-                          padding: EdgeInsets.only(left: 10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            gradient: LinearGradient(
-                              stops: [0.4, 0.7],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              colors: bannerCards[index].cardBackground,
-                            ),
-                          ),
-                          child: TextButton(
-                            style: ButtonStyle(
-                                overlayColor: MaterialStateProperty.resolveWith(
-                                    (states) => Colors.transparent)),
-                            onPressed: () {},
-                            child: Stack(
-                              children: [
-                                Image.asset(
-                                  bannerCards[index].image,
-                                  //'assets/414.jpg',
-                                  fit: BoxFit.fitHeight,
-                                ),
-                                Container(
-                                  padding: EdgeInsets.only(top: 7, right: 5),
-                                  alignment: Alignment.topRight,
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        bannerCards[index].text,
-                                        //'Check Disease',
-                                        style: GoogleFonts.lato(
-                                          color: Colors.lightBlue[900],
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                      Icon(
-                                        Icons.chevron_right_rounded,
-                                        color: Colors.lightBlue[900],
-                                        size: 20,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                    width: MediaQuery.of(context).size.width,
+                    child: Carouselslider(),
                   ),
                   Container(
                     padding: EdgeInsets.only(left: 20),
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "Explore",
+                      "Specialists",
                       textAlign: TextAlign.center,
                       style: GoogleFonts.lato(
                           color: Colors.blue[800],
@@ -355,7 +316,7 @@ class _HomePageState extends State<HomePage> {
                     padding: EdgeInsets.only(left: 20),
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "Nearby doctors",
+                      "Top Rated",
                       textAlign: TextAlign.center,
                       style: GoogleFonts.lato(
                           color: Colors.blue[800],
@@ -363,110 +324,15 @@ class _HomePageState extends State<HomePage> {
                           fontSize: 18),
                     ),
                   ),
-                  StreamBuilder(
-                    stream: FirebaseFirestore.instance
-                        .collection('doctors')
-                        .orderBy('city')
-                        .startAt(['Rajkot']).endAt(
-                            ['Rajkot' + '\uf8ff']).snapshots(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<QuerySnapshot> snapshot) {
-                      if (!snapshot.hasData) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      return ListView(
-                        padding: EdgeInsets.only(top: 10, left: 18, right: 18),
-                        physics: ClampingScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        children: snapshot.data.docs.map(
-                          (document) {
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 3.0),
-                              child: Card(
-                                color: Colors.blue[50],
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Container(
-                                  padding: EdgeInsets.only(
-                                      left: 10, right: 10, top: 0),
-                                  width: MediaQuery.of(context).size.width,
-                                  height:
-                                      MediaQuery.of(context).size.height / 9,
-                                  child: TextButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => DoctorProfile(
-                                                  doctor: document['name'],
-                                                )),
-                                      );
-                                    },
-                                    child: Row(
-                                      children: [
-                                        CircleAvatar(
-                                          backgroundColor: Colors.blue,
-                                          radius: 25,
-                                        ),
-                                        SizedBox(
-                                          width: 20,
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              document['name'],
-                                              style: GoogleFonts.lato(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 17,
-                                                color: Colors.black87,
-                                              ),
-                                            ),
-                                            Text(
-                                              document['type'],
-                                              style: GoogleFonts.lato(
-                                                  fontSize: 16,
-                                                  color: Colors.black54),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          width: 30,
-                                        ),
-                                        Flexible(
-                                          child: Container(
-                                            alignment: Alignment.centerRight,
-                                            child: Text(
-                                              ':',
-                                              style: GoogleFonts.lato(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 25,
-                                                color: Colors.black38,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ).toList(),
-                      );
-                    },
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 15, right: 15),
+                    child: TopRatedList(),
                   ),
                   SizedBox(
-                    height: 40,
+                    height: 20,
                   ),
                 ],
               ),

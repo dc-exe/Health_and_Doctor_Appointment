@@ -15,12 +15,12 @@ List<BannerModel> bannerCards = [
         Color(0xffa1d4ed),
         Color(0xffc0eaff),
       ],
-      "assets/414.jpg"),
+      "assets/414-bg.png"),
   new BannerModel(
       "Covid-19",
       [
-        Color(0xffcfe3fc),
         Color(0xffb6d4fa),
+        Color(0xffcfe3fc),
       ],
-      "assets/covid.jpg"),
+      "assets/covid-bg.png"),
 ];

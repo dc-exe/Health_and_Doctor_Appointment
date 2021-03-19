@@ -40,7 +40,10 @@ dependencies:
   cool_alert: ^1.0.3
   google_nav_bar: ^5.0.2
   font_awesome_flutter: ^8.12.0
-
+  carousel_slider: ^3.0.0
+  typicons_flutter: ^0.4.2
+  quick_actions: ^0.5.0
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

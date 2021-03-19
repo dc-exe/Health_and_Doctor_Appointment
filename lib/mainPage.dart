@@ -1,22 +1,17 @@
 import 'dart:async';
 import 'dart:ui';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:health_and_doctor_appointment/cardModel.dart';
-import 'package:health_and_doctor_appointment/doctorProfile.dart';
-import 'package:health_and_doctor_appointment/exploreList.dart';
-import 'package:health_and_doctor_appointment/firebaseAuth.dart';
-import 'package:health_and_doctor_appointment/homePage.dart';
-import 'package:health_and_doctor_appointment/myAppointments.dart';
-import 'package:health_and_doctor_appointment/nearbyModel.dart';
-import 'package:health_and_doctor_appointment/userProfile.dart';
-import 'package:health_and_doctor_appointment/doctorsList.dart';
-import 'package:intl/intl.dart';
+import 'package:health_and_doctor_appointment/firestore-data/searchList.dart';
+import 'package:health_and_doctor_appointment/screens/homePage.dart';
+import 'package:health_and_doctor_appointment/screens/myAppointments.dart';
+import 'package:health_and_doctor_appointment/screens/userProfile.dart';
+import 'package:health_and_doctor_appointment/screens/doctorsList.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:typicons_flutter/typicons_flutter.dart';
+import 'package:quick_actions/quick_actions.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -41,6 +36,12 @@ class _MainPageState extends State<MainPage> {
     user = _auth.currentUser;
   }
 
+  _navigate(Widget screen) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => screen));
+  }
+
+  String shortcut = "no action set";
+
   @override
   void initState() {
     super.initState();
@@ -55,34 +56,8 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    String _message;
-    DateTime now = DateTime.now();
-    String _currentHour = DateFormat('kk').format(now);
-    int hour = int.parse(_currentHour);
-
-    setState(() {
-      if (hour >= 5 && hour < 12) {
-        _message = 'Good Morning';
-      } else if (hour >= 12 && hour <= 17) {
-        _message = 'Good Afternoon';
-      } else if ((hour > 17 && hour <= 23) || (hour >= 0 && hour < 5)) {
-        _message = 'Good Evening';
-      }
-    });
-
     return Container(
       color: Colors.white,
-      // decoration: BoxDecoration(
-      //   gradient: LinearGradient(
-      //     begin: Alignment.topCenter,
-      //     end: Alignment.bottomCenter,
-      //     stops: [0.1, 0.7],
-      //     colors: [
-      //       Colors.lightBlue[50],
-      //       Colors.lightBlue[100],
-      //     ],
-      //   ),
-      // ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         key: _scaffoldKey,
@@ -90,7 +65,10 @@ class _MainPageState extends State<MainPage> {
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
             boxShadow: [
               BoxShadow(
                 blurRadius: 20,
@@ -100,16 +78,16 @@ class _MainPageState extends State<MainPage> {
           ),
           child: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8),
               child: GNav(
                 curve: Curves.easeOutExpo,
                 rippleColor: Colors.grey[300],
                 hoverColor: Colors.grey[100],
                 haptic: true,
                 tabBorderRadius: 20,
-                gap: 8,
+                gap: 5,
                 activeColor: Colors.white,
-                iconSize: 25,
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 duration: Duration(milliseconds: 400),
                 tabBackgroundColor: Colors.blue.withOpacity(0.7),
@@ -118,7 +96,10 @@ class _MainPageState extends State<MainPage> {
                 ),
                 tabs: [
                   GButton(
-                    icon: FlutterIcons.home_fou,
+                    iconSize: _selectedIndex != 0 ? 28 : 25,
+                    icon: _selectedIndex == 0
+                        ? FlutterIcons.home_fou
+                        : FlutterIcons.home_variant_outline_mco,
                     text: 'Home',
                   ),
                   GButton(
@@ -126,71 +107,20 @@ class _MainPageState extends State<MainPage> {
                     text: 'Search',
                   ),
                   GButton(
-                    icon: FlutterIcons.calendar_clock_mco,
+                    iconSize: 28,
+                    icon: _selectedIndex == 2
+                        ? Typicons.calendar
+                        : Typicons.calendar_outline,
                     text: 'Schedule',
                   ),
                   GButton(
-                    icon: FlutterIcons.user_ant,
+                    iconSize: 29,
+                    icon: _selectedIndex == 3
+                        ? Typicons.user
+                        : Typicons.user_outline,
                     text: 'Profile',
                   ),
                 ],
-                // items: <BottomNavigationBarItem>[
-                //   BottomNavigationBarItem(
-                //     icon: _selectedIndex == 0
-                //         ? Icon(
-                //             Icons.home,
-                //             size: 30,
-                //           )
-                //         : Icon(
-                //             Icons.home_outlined,
-                //             size: 30,
-                //           ),
-                //     label: 'Home',
-                //     backgroundColor: Colors.blue[100],
-                //   ),
-                //   BottomNavigationBarItem(
-                //     icon: _selectedIndex == 1
-                //         ? Icon(
-                //             FlutterIcons.search_faw,
-                //             size: 26,
-                //           )
-                //         : Icon(
-                //             FlutterIcons.search1_ant,
-                //             size: 26,
-                //           ),
-                //     label: 'Find',
-                //     backgroundColor: Colors.blue[100],
-                //   ),
-                //   BottomNavigationBarItem(
-                //     icon: Icon(
-                //       Icons.add_circle_sharp,
-                //       size: 32,
-                //     ),
-                //     label: 'Add',
-                //     backgroundColor: Colors.blue[100],
-                //   ),
-                //   BottomNavigationBarItem(
-                //     icon: Icon(
-                //       FlutterIcons.calendar_clock_mco,
-                //       size: 28,
-                //     ),
-                //     label: 'My Appointments',
-                //     backgroundColor: Colors.blue[100],
-                //   ),
-                //   BottomNavigationBarItem(
-                //     icon: _selectedIndex == 4
-                //         ? Icon(
-                //             Icons.account_circle_rounded,
-                //             size: 30,
-                //           )
-                //         : Icon(
-                //             Icons.account_circle_outlined,
-                //             size: 30,
-                //           ),
-                //     label: 'Account',
-                //     backgroundColor: Colors.blue[100],
-                //   ),
-                // ],
                 selectedIndex: _selectedIndex,
                 onTabChange: _onItemTapped,
               ),
