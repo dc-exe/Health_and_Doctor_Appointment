@@ -18,6 +18,10 @@ class _SignInState extends State<SignIn> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _passwordController = TextEditingController();
 
+  FocusNode f1 = new FocusNode();
+  FocusNode f2 = new FocusNode();
+  FocusNode f3 = new FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,14 +29,20 @@ class _SignInState extends State<SignIn> {
       key: _scaffoldKey,
       body: Builder(builder: (BuildContext context) {
         return SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.fromLTRB(10, 30, 10, 10),
-                  child: withEmailPassword(),
-                ),
-              ],
+          child: NotificationListener<OverscrollIndicatorNotification>(
+            onNotification: (OverscrollIndicatorNotification overscroll) {
+              overscroll.disallowGlow();
+              return;
+            },
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.fromLTRB(10, 30, 10, 10),
+                    child: withEmailPassword(),
+                  ),
+                ],
+              ),
             ),
           ),
         );
@@ -71,6 +81,7 @@ class _SignInState extends State<SignIn> {
               ),
             ),
             TextFormField(
+              focusNode: f1,
               style: GoogleFonts.lato(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
@@ -92,6 +103,11 @@ class _SignInState extends State<SignIn> {
                   fontWeight: FontWeight.w800,
                 ),
               ),
+              onFieldSubmitted: (value) {
+                f1.unfocus();
+                FocusScope.of(context).requestFocus(f2);
+              },
+              textInputAction: TextInputAction.next,
               validator: (value) {
                 if (value.isEmpty) {
                   return 'Please enter the Email';
@@ -106,6 +122,7 @@ class _SignInState extends State<SignIn> {
               height: 25.0,
             ),
             TextFormField(
+              focusNode: f2,
               style: GoogleFonts.lato(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
@@ -127,6 +144,11 @@ class _SignInState extends State<SignIn> {
                   fontWeight: FontWeight.w800,
                 ),
               ),
+              onFieldSubmitted: (value) {
+                f2.unfocus();
+                FocusScope.of(context).requestFocus(f3);
+              },
+              textInputAction: TextInputAction.done,
               validator: (value) {
                 if (value.isEmpty) return 'Please enter the Passord';
                 return null;
@@ -139,6 +161,7 @@ class _SignInState extends State<SignIn> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
+                  focusNode: f3,
                   child: Text(
                     "Sign In",
                     style: GoogleFonts.lato(

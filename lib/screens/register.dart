@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:health_and_doctor_appointment/mainPage.dart';
@@ -20,6 +21,11 @@ class _RegisterState extends State<Register> {
   final TextEditingController _passwordConfirmController =
       TextEditingController();
 
+  FocusNode f1 = new FocusNode();
+  FocusNode f2 = new FocusNode();
+  FocusNode f3 = new FocusNode();
+  FocusNode f4 = new FocusNode();
+
   bool _isSuccess;
 
   @override
@@ -35,14 +41,20 @@ class _RegisterState extends State<Register> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.fromLTRB(10, 40, 10, 10),
-                  child: _signUp(),
-                ),
-              ],
+          child: NotificationListener<OverscrollIndicatorNotification>(
+            onNotification: (OverscrollIndicatorNotification overscroll) {
+              overscroll.disallowGlow();
+              return;
+            },
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.fromLTRB(10, 40, 10, 10),
+                    child: _signUp(),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -72,6 +84,7 @@ class _RegisterState extends State<Register> {
               ),
             ),
             TextFormField(
+              focusNode: f1,
               style: GoogleFonts.lato(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
@@ -93,6 +106,11 @@ class _RegisterState extends State<Register> {
                   fontWeight: FontWeight.w800,
                 ),
               ),
+              onFieldSubmitted: (value) {
+                f1.unfocus();
+                FocusScope.of(context).requestFocus(f2);
+              },
+              textInputAction: TextInputAction.next,
               validator: (value) {
                 if (value.isEmpty) return 'Please enter the Name';
                 return null;
@@ -102,6 +120,7 @@ class _RegisterState extends State<Register> {
               height: 25.0,
             ),
             TextFormField(
+              focusNode: f2,
               style: GoogleFonts.lato(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
@@ -123,6 +142,13 @@ class _RegisterState extends State<Register> {
                   fontWeight: FontWeight.w800,
                 ),
               ),
+              onFieldSubmitted: (value) {
+                f2.unfocus();
+                if (_passwordController.text.isEmpty) {
+                  FocusScope.of(context).requestFocus(f3);
+                }
+              },
+              textInputAction: TextInputAction.next,
               validator: (value) {
                 if (value.isEmpty) {
                   return 'Please enter the Email';
@@ -136,6 +162,7 @@ class _RegisterState extends State<Register> {
               height: 25.0,
             ),
             TextFormField(
+              focusNode: f3,
               style: GoogleFonts.lato(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
@@ -157,6 +184,13 @@ class _RegisterState extends State<Register> {
                   fontWeight: FontWeight.w800,
                 ),
               ),
+              onFieldSubmitted: (value) {
+                f3.unfocus();
+                if (_passwordConfirmController.text.isEmpty) {
+                  FocusScope.of(context).requestFocus(f3);
+                }
+              },
+              textInputAction: TextInputAction.next,
               validator: (value) {
                 if (value.isEmpty) {
                   return 'Please enter the Password';
@@ -172,6 +206,7 @@ class _RegisterState extends State<Register> {
               height: 25.0,
             ),
             TextFormField(
+              focusNode: f4,
               style: GoogleFonts.lato(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
@@ -192,6 +227,10 @@ class _RegisterState extends State<Register> {
                   fontWeight: FontWeight.w800,
                 ),
               ),
+              onFieldSubmitted: (value) {
+                f4.unfocus();
+              },
+              textInputAction: TextInputAction.done,
               validator: (value) {
                 if (value.isEmpty) {
                   return 'Please enter the Password';
@@ -314,6 +353,46 @@ class _RegisterState extends State<Register> {
     );
   }
 
+  showAlertDialog(BuildContext context) {
+    Navigator.pop(context);
+    // set up the button
+    Widget okButton = TextButton(
+      child: Text(
+        "OK",
+        style: GoogleFonts.lato(fontWeight: FontWeight.bold),
+      ),
+      onPressed: () {
+        Navigator.pop(context);
+        FocusScope.of(context).requestFocus(f2);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text(
+        "Error!",
+        style: GoogleFonts.lato(
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      content: Text(
+        "Email already Exists",
+        style: GoogleFonts.lato(),
+      ),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
       content: new Row(
@@ -344,11 +423,25 @@ class _RegisterState extends State<Register> {
   }
 
   void _registerAccount() async {
-    final User user = (await _auth.createUserWithEmailAndPassword(
-      email: _emailController.text,
-      password: _passwordController.text,
-    ))
-        .user;
+    User user;
+    UserCredential credential;
+
+    try {
+      credential = await _auth.createUserWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+    } catch (error) {
+      if (error.toString().compareTo(
+              '[firebase_auth/email-already-in-use] The email address is already in use by another account.') ==
+          0) {
+        showAlertDialog(context);
+        print(
+            "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        print(user);
+      }
+    }
+    if (user != null) user = credential.user;
 
     if (user != null) {
       if (!user.emailVerified) {

@@ -1,4 +1,4 @@
-# health_and_doctor_appointment
+# Medic.ly - Health and Doctor Appointment
 
 A new Flutter project.
 
