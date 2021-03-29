@@ -12,6 +12,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:typicons_flutter/typicons_flutter.dart';
 import 'package:quick_actions/quick_actions.dart';
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -61,7 +62,10 @@ class _MainPageState extends State<MainPage> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         key: _scaffoldKey,
-        body: _pages[_selectedIndex],
+        body: DoubleBackToCloseApp(
+          snackBar: const SnackBar(content: Text('Press again to leave')),
+          child: _pages[_selectedIndex],
+        ),
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
             color: Colors.white,

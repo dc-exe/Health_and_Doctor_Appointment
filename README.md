@@ -1,4 +1,4 @@
-![Poster](assets/Medic.ly_poster.png?raw=true "Medic.ly")
+![Poster](assets/Medic.ly_poster1.png?raw=true "Medic.ly")
 
 # Medic.ly - Health and Doctor Appointment
 

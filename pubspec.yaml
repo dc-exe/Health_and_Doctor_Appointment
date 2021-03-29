@@ -43,6 +43,7 @@ dependencies:
   carousel_slider: ^3.0.0
   typicons_flutter: ^0.4.2
   quick_actions: ^0.5.0
+  double_back_to_close_app: ^2.0.1
   
 dev_dependencies:
   flutter_test:

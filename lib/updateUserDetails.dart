@@ -18,6 +18,7 @@ class _UpdateUserDetailsState extends State<UpdateUserDetails> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   User user;
   String UserID;
+  String value;
 
   Future<void> _getUser() async {
     user = _auth.currentUser;
@@ -68,25 +69,35 @@ class _UpdateUserDetailsState extends State<UpdateUserDetails> {
                   .snapshots(),
               builder: (context, snapshot) {
                 var userData = snapshot.data;
-                return Container(
-                  margin: EdgeInsets.symmetric(horizontal: 15),
-                  child: TextFormField(
-                    controller: _textcontroller,
-                    style: GoogleFonts.lato(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                if (!(snapshot.hasData)) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  value = userData[widget.field];
+                  return Container(
+                    margin: EdgeInsets.symmetric(horizontal: 15),
+                    child: TextFormField(
+                      controller: _textcontroller
+                        ..text = value
+                        ..selection = TextSelection.collapsed(
+                            offset: _textcontroller.text.length),
+                      style: GoogleFonts.lato(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      onFieldSubmitted: (String _data) {
+                        _textcontroller.text = _data;
+                      },
+                      textInputAction: TextInputAction.done,
+                      validator: (value) {
+                        if (value.isEmpty)
+                          return 'Please Enter the ' + widget.label;
+                        return null;
+                      },
                     ),
-                    onFieldSubmitted: (String _data) {
-                      _textcontroller.text = _data;
-                    },
-                    textInputAction: TextInputAction.done,
-                    validator: (value) {
-                      if (value.isEmpty)
-                        return 'Please Enter the ' + widget.label;
-                      return null;
-                    },
-                  ),
-                );
+                  );
+                }
               },
             ),
             SizedBox(
@@ -131,7 +142,6 @@ class _UpdateUserDetailsState extends State<UpdateUserDetails> {
     if (widget.field.compareTo('name') == 0) {
       await user.updateProfile(displayName: _textcontroller.text);
     }
-    if (widget.field.compareTo('phone') == 0) {
-    }
+    if (widget.field.compareTo('phone') == 0) {}
   }
 }

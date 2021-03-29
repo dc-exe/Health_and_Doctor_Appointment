@@ -81,7 +81,8 @@ class _ExploreListState extends State<ExploreList> {
                           //mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             CircleAvatar(
-                              backgroundColor: Colors.blue,
+                              backgroundImage: NetworkImage(doctor['image']),
+                              //backgroundColor: Colors.blue,
                               radius: 25,
                             ),
                             SizedBox(
@@ -100,7 +101,7 @@ class _ExploreListState extends State<ExploreList> {
                                   ),
                                 ),
                                 Text(
-                                  doctor['type'],
+                                  doctor['phone'],
                                   style: GoogleFonts.lato(
                                       fontSize: 16, color: Colors.black54),
                                 ),
