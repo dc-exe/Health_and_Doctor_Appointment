@@ -1,3 +1,5 @@
+![Poster](assets/Medic.ly_poster1.png?raw=true "Medic.ly")
+
 # Medic.ly - Health and Doctor Appointment
 
 A new Flutter project.
