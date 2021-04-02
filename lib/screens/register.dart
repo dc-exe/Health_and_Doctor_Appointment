@@ -441,7 +441,7 @@ class _RegisterState extends State<Register> {
         print(user);
       }
     }
-    if (user != null) user = credential.user;
+    user = credential.user;
 
     if (user != null) {
       if (!user.emailVerified) {
