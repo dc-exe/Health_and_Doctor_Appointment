@@ -187,7 +187,7 @@ class _RegisterState extends State<Register> {
               onFieldSubmitted: (value) {
                 f3.unfocus();
                 if (_passwordConfirmController.text.isEmpty) {
-                  FocusScope.of(context).requestFocus(f3);
+                  FocusScope.of(context).requestFocus(f4);
                 }
               },
               textInputAction: TextInputAction.next,
