@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:health_and_doctor_appointment/model/bannerModel.dart';
+import 'package:health_and_doctor_appointment/screens/disease.dart';
+import 'package:health_and_doctor_appointment/screens/diseasedetail.dart';
 
 class Carouselslider extends StatelessWidget {
   @override
