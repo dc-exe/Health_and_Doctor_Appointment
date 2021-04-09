@@ -327,7 +327,7 @@ class _UserProfileState extends State<UserProfile> {
           alignment: Alignment.centerLeft,
           padding: EdgeInsets.only(top: 10, left: 40),
           child: Text(
-            userData['bio'],
+            userData['bio'] == null ? "No Bio" : userData['bio'],
             style: GoogleFonts.lato(
               fontSize: 16,
               fontWeight: FontWeight.w500,
