@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:health_and_doctor_appointment/model/bannerModel.dart';
+import 'package:health_and_doctor_appointment/screens/disease.dart';
+import 'package:health_and_doctor_appointment/screens/diseasedetail.dart';
 
 class Carouselslider extends StatelessWidget {
   @override
@@ -29,7 +31,15 @@ class Carouselslider extends StatelessWidget {
             ),
             child: GestureDetector(
               onTap: () {
-                index == 0 ? print('>>>>> index - 1') : print('>>>>>index - 2');
+                index == 0
+                    ? Navigator.push(context,
+                        MaterialPageRoute(builder: (BuildContext context) {
+                        return Disease();
+                      }))
+                    : Navigator.push(context,
+                        MaterialPageRoute(builder: (BuildContext context) {
+                        return DiseaseDetail(disease: 'Covid-19');
+                      }));
               },
               child: Stack(
                 children: [

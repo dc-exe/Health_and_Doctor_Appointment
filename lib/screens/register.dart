@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:health_and_doctor_appointment/mainPage.dart';
 import 'package:health_and_doctor_appointment/screens/signIn.dart';
 
 class Register extends StatefulWidget {
@@ -187,7 +186,7 @@ class _RegisterState extends State<Register> {
               onFieldSubmitted: (value) {
                 f3.unfocus();
                 if (_passwordConfirmController.text.isEmpty) {
-                  FocusScope.of(context).requestFocus(f3);
+                  FocusScope.of(context).requestFocus(f4);
                 }
               },
               textInputAction: TextInputAction.next,

@@ -5,6 +5,7 @@ import 'package:health_and_doctor_appointment/screens/doctorProfile.dart';
 import 'package:health_and_doctor_appointment/screens/firebaseAuth.dart';
 import 'package:health_and_doctor_appointment/mainPage.dart';
 import 'package:health_and_doctor_appointment/screens/myAppointments.dart';
+import 'package:health_and_doctor_appointment/screens/skip.dart';
 import 'package:health_and_doctor_appointment/screens/userProfile.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         // When navigating to the "/" route, build the FirstScreen widget.
-        '/': (context) => user == null ? FireBaseAuth() : MainPage(),
+        '/': (context) => user == null ? Skip() : MainPage(),
         '/login': (context) => FireBaseAuth(),
         '/home': (context) => MainPage(),
         '/profile': (context) => UserProfile(),
