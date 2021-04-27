@@ -8,11 +8,13 @@ This is UI model of the Online Doctor Appointment booking App. It is connected t
 
 [Behance Link :arrow_upper_right:](https://www.behance.net/gallery/118230811/Doctor-Appointment-App)
 <br/>
+<br/>
 
 <h2>Directory Structure</h2>
+
 ```
 lib
-│───main.dart    
+│───main.dart
 │───mainPage.dart
 │───carouselSlider.dart
 │───updateUserDetails.dart
@@ -43,12 +45,11 @@ lib
 |───skip.dart
 |───userProfile.dart
 └───userSettings.dart
-
 ```
 
 <h2>Firestore collection structure</h2>
-```
 
+```
 appointments
 |───all (full history of appointments registered)
 |───
@@ -67,18 +68,17 @@ users
 ```
 
 <h2>Pull Requests</h2>
-Add a pull request to contribute to this project with a proper fix or feature.
+<p>Add a pull request to contribute to this project with a proper fix or feature.</p>
 <br/>
 
-<h5>Some features still under development</h5>
+<h3>Some features still under development</h3>
 
-* Notification
-* Disease
-* Google Sign in
-* Forgot password
-* Intoduction sceens
+- Notification
+- Disease
+- Google Sign in
+- Forgot password
+- Intoduction sceens
 
 ![poster](./assets/poster2.png)
 
 <h2 align="center">Please star 🌟 the project if you like.</h2>
-```
