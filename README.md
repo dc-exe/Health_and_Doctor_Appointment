@@ -27,24 +27,24 @@ lib
     └───UserDetails.dart
 
 └───model
-|───bannerModel.dart
-└───cardModel.dart
+    |───bannerModel.dart
+    └───cardModel.dart
 
 └───screens
-|───bookingScreen.dart
-|───disease.dart
-|───diseasedetail.dart
-|───doctorProfile.dart
-|───doctorList.dart
-|───exploreList.dart
-|───firebaseAuth.dart
-|───homePage.dart
-|───myAppointments.dart
-|───register.dart
-|───aignIn.dart
-|───skip.dart
-|───userProfile.dart
-└───userSettings.dart
+    |───bookingScreen.dart
+    |───disease.dart
+    |───diseasedetail.dart
+    |───doctorProfile.dart
+    |───doctorList.dart
+    |───exploreList.dart
+    |───firebaseAuth.dart
+    |───homePage.dart
+    |───myAppointments.dart
+    |───register.dart
+    |───aignIn.dart
+    |───skip.dart
+    |───userProfile.dart
+    └───userSettings.dart
 ```
 
 <h2>Firestore collection structure</h2>
