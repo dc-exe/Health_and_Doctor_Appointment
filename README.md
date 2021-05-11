@@ -4,6 +4,9 @@
 
 This is UI model of the Online Doctor Appointment booking App. It is connected to firebase for authentication and data storage.
 
+<p align="center">
+<a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fdc-exe%2FHealth_and_Doctor_Appointment&count_bg=%2379C83D&title_bg=%23555555&icon=flutter.svg&icon_color=%23E7E7E7&title=hits&edge_flat=false"/></a>
+
 <h2>Project UI/UX case study portfolio</h2>
 
 [Behance Link :arrow_upper_right:](https://www.behance.net/gallery/118230811/Doctor-Appointment-App)
