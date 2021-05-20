@@ -1,0 +1,38 @@
+         Container(
+              padding: EdgeInsets.only(top: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Colors.red[700],
+                        borderRadius: BorderRadius.circular(32)),
+                    child: IconButton(
+                      icon: Icon(
+                        FlutterIcons.google_ant,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {},
+                    ),
+                  ),
+                  SizedBox(
+                    width: 30,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Colors.blue[900],
+                        borderRadius: BorderRadius.circular(32)),
+                    child: IconButton(
+                      icon: Icon(
+                        FlutterIcons.facebook_f_faw,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {},
+                    ),
+                  )
+                ],
+              ),
+            ),
+
+            mydocnear@gmail.com
+            docnear123
